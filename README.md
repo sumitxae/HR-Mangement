@@ -30,8 +30,8 @@ The HR Management System is a web application designed to streamline and manage 
 
 ### Clone the Repository
 ```bash
-git clone https://github.com/your-repo/human-resources-management-system.git
-cd human-resources-management-system
+git clone https://github.com/sumitxae/HR-Mangement.git
+cd HR-Management
 ```
 
 ### Install Dependencies
