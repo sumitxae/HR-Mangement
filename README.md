@@ -314,11 +314,3 @@ The server will run on `http://localhost:5000`.
     "benefits": { ... }
 }
 ```
-
-## Conclusion
-
-This documentation provides an overview of the HR Management System, including its features, installation instructions, and API endpoints. For any further assistance or feature requests, please feel free to reach out.
-
----
-
-Feel free to modify any sections as needed or add more specific details related to your project. If you need additional sections or clarifications, just let me know!

@@ -31,7 +31,7 @@ const createOrUpdateEmployee = async (req, res) => {
 // Upload employee documents
 const uploadEmployeeDocument = async (req, res) => {
   const { userId } = req.body;
-  const document = req.file; // Assuming you handle file uploads with Multer
+  const document = req.file; // Assuming file is uploaded via Multer middleware
 
   try {
     const documentUrl = await uploadDocument(document); // Upload document to storage and get the URL
@@ -97,8 +97,6 @@ const generateEmployeePayslip = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-// Other methods related to Performance Management, Benefits Administration etc.
 
 // Exporting the functions
 module.exports = {
