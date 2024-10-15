@@ -6,16 +6,14 @@ const { uploadDocument } = require('../utils/documentUtils'); // Assume a utilit
 // Upload Document
 const uploadDocumentHandler = async (req, res) => {
   const { employeeId, docName } = req.body;
-  const file = req.file; // Assuming you use multer for file uploads
+  const file = req.file;
 
   if (!file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
   try {
-    // Upload to BunnyCDN
-    const docUrl = await uploadDocument(file); // Function to handle uploading to BunnyCDN
-
+    const docUrl = await uploadDocument(file);
     const document = new Document({
       employee: employeeId,
       docName,
@@ -23,9 +21,9 @@ const uploadDocumentHandler = async (req, res) => {
     });
 
     await document.save();
-
     res.status(201).json({ message: 'Document uploaded successfully', document });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: 'Error uploading document', error });
   }
 };

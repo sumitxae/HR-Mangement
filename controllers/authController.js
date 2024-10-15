@@ -13,17 +13,22 @@ const generateToken = (id, role) => {
 const registerUser = async (req, res) => {
   const { name, email, password, role, jobRole, salary, contactDetails } = req.body;
 
+  // Validate input
+  if (!name || !email || !password || !role) {
+    return res.status(400).json({ message: 'Name, email, password, and role are required' });
+  }
+
   try {
-    // Create User
     const user = new User({
       name,
       email,
       password,
-      role, // role could be 'hr' or 'employee'
+      role,
     });
+
     await user.save();
 
-    // If the role is 'employee', create an associated employee profile
+    // Create associated employee profile if the role is 'employee'
     if (role === 'employee') {
       const employee = new Employee({
         user: user._id,
@@ -34,25 +39,18 @@ const registerUser = async (req, res) => {
       await employee.save();
     }
 
-    // Create JWT token for authentication
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '30d',
-    });
-
+    const token = generateToken(user._id, user.role);
     res.status(201).json({
       message: 'User registered successfully!',
-      token, // Return the token after registration
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      token,
+      user: { id: user._id, name: user.name, email: user.email, role: user.role },
     });
   } catch (error) {
+    console.error(error);
     res.status(400).json({ message: error.message });
   }
 };
+
 
 // @desc    Login user
 const loginUser = async (req, res) => {

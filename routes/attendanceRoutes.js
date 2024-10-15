@@ -14,9 +14,6 @@ router.post('/checkin', checkInHandler);
 // Route for checking out
 router.post('/checkout', checkOutHandler);
 
-// Route for recording leave
-router.post('/leave', recordLeaveHandler);
-
 // Route for getting attendance records for a specific employee
 router.get('/:employeeId', getAttendanceForEmployee);
 

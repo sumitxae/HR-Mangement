@@ -1,28 +1,37 @@
-// controllers/attendanceController.js
 const Attendance = require('../models/Attendance');
+const Geofence = require('../models/Geofence');
+const { isWithinGeofence } = require('../utils/geofenceUtils');
 
-// Check-In
 // Check-In
 const checkInHandler = async (req, res) => {
-  const { employeeId, geofencedLocation, currentLocation } = req.body;
+  const { employeeId, currentLocation } = req.body;
 
   // Validate input
-  if (!employeeId || !geofencedLocation || !currentLocation) {
-    return res.status(400).json({ message: 'Employee ID, geofenced location, and current location are required' });
-  }
-
-  // Check if the current location is within the geofenced area
-  if (!isWithinGeofence(geofencedLocation, currentLocation, process.env.GEO_RADIUS)) {
-    return res.status(403).json({ message: 'You are outside the geofenced area and cannot check in' });
+  if (!employeeId || !currentLocation) {
+    return res.status(400).json({ message: 'Employee ID and current location are required' });
   }
 
   try {
+    // Retrieve the current geofenced location set by HR
+    const geofence = await Geofence.findOne();
+    if (!geofence) {
+      return res.status(404).json({ message: 'Geofence location not set' });
+    }
+
+    const radius = geofence.radius; // Use the radius from the geofence model
+
+    // Check if the current location is within the geofenced area
+    const isInGeofence = isWithinGeofence(geofence, currentLocation, radius);
+    
+    if (!isInGeofence) {
+      return res.status(403).json({ message: 'You are not within the geofenced area for check-in' });
+    }
+
+    // Create a new attendance record
     const attendance = new Attendance({
       employee: employeeId,
       checkInTime: new Date(),
-      geofencedLocation,
-      checkOutTime: null,
-      overtimeHours: 0,
+      geofencedLocation: geofence,
     });
 
     await attendance.save();
@@ -37,19 +46,25 @@ const checkInHandler = async (req, res) => {
 const checkOutHandler = async (req, res) => {
   const { attendanceId, currentLocation } = req.body;
 
-  // Validate input
-  if (!attendanceId || !currentLocation) {
-    return res.status(400).json({ message: 'Attendance ID and current location are required' });
-  }
-
   try {
+    // Retrieve the current geofenced location set by HR
+    const geofence = await Geofence.findOne();
+    if (!geofence) {
+      return res.status(404).json({ message: 'Geofence location not set' });
+    }
+
+    const radius = geofence.radius; // Use the radius from the geofence model
+
+    // Check if the current location is within the geofenced area
+    const isInGeofence = isWithinGeofence(geofence, currentLocation, radius);
+    
+    if (!isInGeofence) {
+      return res.status(403).json({ message: 'You are not within the geofenced area for check-out' });
+    }
+
     const attendance = await Attendance.findById(attendanceId);
     if (!attendance) {
       return res.status(404).json({ message: 'Attendance record not found' });
-    }
-    // Check if the current location is within the geofenced area during check-out
-    if (!isWithinGeofence(attendance.geofencedLocation, currentLocation, process.env.GEO_RADIUS)) {
-      return res.status(403).json({ message: 'You are outside the geofenced area and cannot check out' });
     }
 
     attendance.checkOutTime = new Date();
@@ -83,5 +98,5 @@ const getAttendanceForEmployee = async (req, res) => {
 module.exports = {
   checkInHandler,
   checkOutHandler,
-  getAttendanceForEmployee
+  getAttendanceForEmployee,
 };

@@ -13,7 +13,6 @@ const attendanceSchema = new mongoose.Schema({
   },
   checkOutTime: {
     type: Date,
-    required: true
   },
   geofencedLocation: {
     type: String,
@@ -25,10 +24,8 @@ const attendanceSchema = new mongoose.Schema({
   },
   leaveRecords: [
     {
-      leaveType: { type: String, enum: ['vacation', 'sick', 'personal'], required: true },
-      startDate: { type: Date, required: true },
-      endDate: { type: Date, required: true },
-      status: { type: String, enum: ['approved', 'pending', 'denied'], default: 'pending' }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Leave'
     }
   ]
 }, {

@@ -44,6 +44,11 @@ exports.updateLeaveStatus = async (req, res) => {
 
         leave.status = status;
         await leave.save();
+
+        if(status === 'approved') {
+            const employee = await Employee.findById(leave.employee);
+            employee.leaveRecords.push(leave);
+            }
         res.json(leave);
     } catch (error) {
         res.status(400).json({ message: error.message });
