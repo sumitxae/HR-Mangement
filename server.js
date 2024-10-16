@@ -19,14 +19,14 @@ const performanceRoutes = require('./routes/performance.routes');
 const benefitsRoutes = require('./routes/benefits.routes');
 const leaveRoutes = require('./routes/leave.routes');
 const taxRoutes = require('./routes/tax.routes');
-
+const path = require('path');
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(logger("dev")); 
-
+console.log(path.dirname);
 app.use(
     expressSession({
       secret: process.env.EXPRESS_SESSION_SECRET,
