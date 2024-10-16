@@ -1,6 +1,6 @@
 const express = require('express');
 const { setGeofenceHandler, getGeofenceHandler } = require('../controllers/geofenceController');
-const { isHR } = require('../middlewares/authmiddleware');
+const { isHR } = require('../middlewares/authMiddleware');
 const router = express.Router();
 
 // Route to set/update the geofence

@@ -1,4 +1,3 @@
-// backend/controllers/performanceController.js
 const Performance = require('../models/Performance');
 
 // Create or update performance record
@@ -11,9 +10,9 @@ const createPerformanceRecord = async (req, res) => {
         
         // If it exists, update it; otherwise, create a new one
         if (performance) {
-            performance.goals = goals || performance.goals; // Update goals only if new ones are provided
-            performance.reviews = reviews || performance.reviews; // Update reviews only if new ones are provided
-            performance.developmentPlans = developmentPlans || performance.developmentPlans; // Update plans
+            performance.goals = goals || performance.goals; 
+            performance.reviews = reviews || performance.reviews; 
+            performance.developmentPlans = developmentPlans || performance.developmentPlans; 
         } else {
             performance = new Performance({ employee: employeeId, goals, reviews, developmentPlans });
         }

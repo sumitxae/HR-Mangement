@@ -1,10 +1,8 @@
-// utils/documentUtils.js
-const BunnyCDNStorage = require('bunnycdn-storage').default; // Import the bunnycdn-storage package
+const BunnyCDNStorage = require('bunnycdn-storage').default;
 const Employee = require('../models/Employee');
-const path = require('path'); // Import path module for file path handling
-
-const BUNNYCDN_API_KEY = process.env.BUNNYCDN_API_KEY; // Your BunnyCDN API key
-const BUNNYCDN_STORAGE_ZONE_NAME = process.env.BUNNYCDN_STORAGE_ZONE_NAME; // Your BunnyCDN Storage Zone name
+const path = require('path'); 
+const BUNNYCDN_API_KEY = process.env.BUNNYCDN_API_KEY; 
+const BUNNYCDN_STORAGE_ZONE_NAME = process.env.BUNNYCDN_STORAGE_ZONE_NAME;
 
 // Create an instance of BunnyCDNStorage
 const bunny = new BunnyCDNStorage(
@@ -35,8 +33,6 @@ const generatePayslip = (employee, salaryDetails) => {
       employeeId: employee._id,
       jobRole: employee.jobRole,
       salary: salaryDetails.salary,
-      deductions: salaryDetails.deductions,
-      netSalary: salaryDetails.salary - salaryDetails.deductions,
       month: salaryDetails.month,
       year: salaryDetails.year,
     };
@@ -44,11 +40,10 @@ const generatePayslip = (employee, salaryDetails) => {
     return payslip;
   };
   
-  // Example function to save payslip to a file (optional)
   const savePayslipToFile = (payslip, fileName) => {
-    const filePath = path.join(__dirname, '../payslips', fileName); // Create a directory for payslips
-    fs.writeFileSync(filePath, JSON.stringify(payslip, null, 2)); // Save payslip as JSON file
-    return filePath; // Return the path of the saved payslip
+    const filePath = path.join(__dirname, '../payslips', fileName);
+    fs.writeFileSync(filePath, JSON.stringify(payslip, null, 2)); 
+    return filePath; 
   };
 
 module.exports = { uploadDocument, generatePayslip, savePayslipToFile };

@@ -5,16 +5,13 @@ const { protect, isHR } = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
-// @route   POST /api/auth/register
-// @desc    Register a new user (HR or Employee)
+// Route for registering a new user
 router.post('/register', registerUser);
 
-// @route   POST /api/auth/login
-// @desc    Login user
+// Route for logging in a user
 router.post('/login', loginUser);
 
-// @route   POST /api/auth/logout
-// @desc    Logout user
+// Route for logging out a user
 router.post('/logout', protect, logoutUser);
 
 module.exports = router;

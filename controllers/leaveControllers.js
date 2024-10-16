@@ -4,12 +4,14 @@ const Leave = require('../models/Leave');
 // Create a new leave request
 exports.createLeaveRequest = async (req, res) => {
     const { employeeId, leaveType, startDate, endDate, reason } = req.body;
-
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const random = new Date("2022-01-01T00:00:00Z");
     const leaveRequest = new Leave({
         employee: employeeId,
         leaveType,
-        startDate,
-        endDate,
+        startDate: start,
+        endDate: end,
         reason
     });
 

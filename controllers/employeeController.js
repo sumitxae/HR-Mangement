@@ -31,7 +31,7 @@ const createOrUpdateEmployee = async (req, res) => {
 // Upload employee documents
 const uploadEmployeeDocument = async (req, res) => {
   const { userId } = req.body;
-  const document = req.file; // Assuming file is uploaded via Multer middleware
+  const document = req.file; // this file will be uploaded via Multer middleware
 
   try {
     const documentUrl = await uploadDocument(document); // Upload document to storage and get the URL
@@ -75,9 +75,9 @@ const calculateOvertime = async (req, res) => {
 
   try {
     const employee = await Employee.findOne({ user: userId });
-    const overtimeHours = hoursWorked - 40; // Assuming 40 hours is standard
+    const overtimeHours = hoursWorked - 40; // Assuming 40 hours is the standard work week/ Can be change in future
 
-    employee.overtimeHours += overtimeHours > 0 ? overtimeHours : 0; // Add overtime if greater than zero
+    employee.overtimeHours += overtimeHours > 0 ? overtimeHours : 0;
     await employee.save();
 
     res.status(200).json(employee);
@@ -91,7 +91,8 @@ const generateEmployeePayslip = async (req, res) => {
   const { userId } = req.body;
 
   try {
-    const payslip = await generatePayslip(userId); // Utility function to generate payslip
+    // Utility function to generate payslip
+    const payslip = await generatePayslip(userId);
     res.status(200).json({ payslip });
   } catch (error) {
     res.status(500).json({ message: error.message });

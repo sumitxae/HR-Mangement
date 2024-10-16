@@ -1,9 +1,8 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 // Middleware to protect routes
-exports.protect = async (req, res, next) => {
+const protect = async (req, res, next) => {
     let token;
     
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -24,7 +23,7 @@ exports.protect = async (req, res, next) => {
 };
 
 // Middleware to check for HR role
-exports.isHR = (req, res, next) => {
+const isHR = (req, res, next) => {
     if (req.user && req.user.role === 'hr') {
         next();
     } else {
@@ -33,10 +32,12 @@ exports.isHR = (req, res, next) => {
 };
 
 // Middleware to check for Employee role
-exports.isEmployee = (req, res, next) => {
+const isEmployee = (req, res, next) => {
     if (req.user && req.user.role === 'employee') {
         next();
     } else {
         res.status(403).json({ message: 'Not authorized as Employee' });
     }
 };
+
+module.exports = { protect, isHR, isEmployee };

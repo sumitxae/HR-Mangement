@@ -1,10 +1,9 @@
-// backend/models/Leave.js
 const mongoose = require('mongoose');
 
 const leaveSchema = new mongoose.Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Employee', // Reference to Employee model
+        ref: 'Employee',
         required: true
     },
     leaveType: {

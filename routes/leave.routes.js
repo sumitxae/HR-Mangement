@@ -1,7 +1,7 @@
 // backend/routes/leaveRoutes.js
 const express = require('express');
 const router = express.Router();
-const leaveController = require('../controllers/leaveController');
+const leaveController = require('../controllers/leaveControllers');
 
 // Create a new leave request
 router.post('/', leaveController.createLeaveRequest);

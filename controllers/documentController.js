@@ -1,7 +1,6 @@
-// controllers/documentController.js
 const Document = require('../models/Document');
 const Employee = require('../models/Employee');
-const { uploadDocument } = require('../utils/documentUtils'); // Assume a utility function for uploading documents to BunnyCDN
+const { uploadDocument } = require('../utils/documentUtils');
 
 // Upload Document
 const uploadDocumentHandler = async (req, res) => {

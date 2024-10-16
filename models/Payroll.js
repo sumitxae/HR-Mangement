@@ -1,7 +1,6 @@
-// models/Payroll.js
 const mongoose = require('mongoose');
 
-const payrollSchema = new mongoose.Schema({
+const payslipSchema = new mongoose.Schema({
   employee: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Employee',
@@ -11,24 +10,9 @@ const payrollSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  commission: {
-    type: Number,
-    default: 0
-  },
-  deductions: {
-    type: Number,
-    default: 0
-  },
-  netSalary: {
-    type: Number,
-    required: true
-  },
   tax: {
     type: Number,
     required: true
-  },
-  payslipUrl: {
-    type: String
   },
   period: {
     start: {
@@ -44,5 +28,5 @@ const payrollSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const Payroll = mongoose.model('Payroll', payrollSchema);
+const Payroll = mongoose.model('Payroll', payslipSchema);
 module.exports = Payroll;

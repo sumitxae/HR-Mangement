@@ -1,4 +1,3 @@
-// models/Attendance.js
 const mongoose = require('mongoose');
 
 const attendanceSchema = new mongoose.Schema({
@@ -13,10 +12,6 @@ const attendanceSchema = new mongoose.Schema({
   },
   checkOutTime: {
     type: Date,
-  },
-  geofencedLocation: {
-    type: String,
-    required: true
   },
   overtimeHours: {
     type: Number,

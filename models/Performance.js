@@ -1,10 +1,9 @@
-// backend/models/Performance.js
 const mongoose = require('mongoose');
 
 const performanceSchema = new mongoose.Schema({
     employee: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Employee', // Reference to Employee model
+        ref: 'Employee', 
         required: true
     },
     goals: [

@@ -1,4 +1,3 @@
-// models/Benefits.js
 const mongoose = require('mongoose');
 
 const benefitsSchema = new mongoose.Schema({

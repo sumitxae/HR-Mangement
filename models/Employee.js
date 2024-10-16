@@ -1,4 +1,3 @@
-// models/Employee.js
 const mongoose = require('mongoose');
 
 const employeeSchema = new mongoose.Schema({
@@ -11,13 +10,14 @@ const employeeSchema = new mongoose.Schema({
     address: String,
     phone: String
   },
-  jobRole: {
+  department: {
     type: String,
-    required: true
+    required: true,
+    default: 'HR'
   },
-  salary: {
+  hourlyRate: {
     type: Number,
-    required: true
+    default: 1
   },
   performanceHistory: [
     {
@@ -27,24 +27,24 @@ const employeeSchema = new mongoose.Schema({
   ],
   documents: [
     {
-      docName: { type: String, required: true }, // Making docName required
-      docUrl: { type: String, required: true } // Making docUrl required
+      docName: { type: String, required: true }, 
+      docUrl: { type: String, required: true } 
     }
   ],
   attendance: [
     {
       date: { type: Date, required: true },
-      checkInTime: { type: String, required: true }, // Making checkInTime required
-      checkOutTime: { type: String, required: true }, // Making checkOutTime required
-      geofencedLocation: { type: String, required: true } // Making geofencedLocation required
+      checkInTime: { type: String, required: true }, 
+      checkOutTime: { type: String, required: true }, 
+      geofencedLocation: { type: String, required: true } 
     }
   ],
   overtimeHours: { type: Number, default: 0 },
   leaveRecords: [
     {
       leaveType: { type: String, enum: ['vacation', 'sick', 'personal'], required: true },
-      startDate: { type: Date, required: true }, // Making startDate required
-      endDate: { type: Date, required: true }, // Making endDate required
+      startDate: { type: Date, required: true }, 
+      endDate: { type: Date, required: true }, 
       status: { type: String, enum: ['approved', 'pending', 'denied'], default: 'pending' }
     }
   ],
@@ -54,8 +54,8 @@ const employeeSchema = new mongoose.Schema({
   },
   goals: [
     {
-      title: { type: String, required: true }, // Making title required
-      description: { type: String, required: true }, // Making description required
+      title: { type: String, required: true }, 
+      description: { type: String, required: true }, 
       status: { type: String, enum: ['pending', 'in-progress', 'completed'], default: 'pending' }
     }
   ],

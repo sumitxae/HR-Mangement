@@ -4,7 +4,7 @@ const router = express.Router();
 const { uploadDocumentHandler, getDocumentsForEmployee } = require('../controllers/documentController');
 const multer = require('multer');
 
-const upload = multer({ dest: 'uploads/' }); // Configure multer to save uploaded files
+const upload = multer({ dest: 'uploads/' }); 
 
 // Route for uploading a document
 router.post('/upload', upload.single('document'), uploadDocumentHandler);

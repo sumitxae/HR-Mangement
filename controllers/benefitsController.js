@@ -1,4 +1,3 @@
-// controllers/benefitsController.js
 const Benefits = require('../models/Benefits');
 
 // Enroll Employee in Benefits
