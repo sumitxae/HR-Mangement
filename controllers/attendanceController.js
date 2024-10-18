@@ -33,13 +33,14 @@ const updateGeofenceLocation = async (req, res) => {
 // Check-In
 const checkInHandler = async (req, res) => {
   const { employeeId, currentLocation } = req.body;
+  const employee = await Employee.findById(employeeId);
   const geofencedLocation = await Geofence.findOne();
 
   if (!geofencedLocation) {
     return res.status(400).json({ message: 'Geofenced location is not set. HR needs to set the geofenced location first' });
   }
 
-  if (!employeeId || !currentLocation) {
+  if (!employeeId || !currentLocation || !employee) {
     return res.status(400).json({ message: 'Employee ID and current location are required' });
   }
 
@@ -49,7 +50,6 @@ const checkInHandler = async (req, res) => {
   }
 
   try {
-    // Check if the employee has already checked in today
     const today = moment().startOf('day'); 
     const existingAttendance = await Attendance.findOne({
       employee: employeeId,
@@ -63,7 +63,6 @@ const checkInHandler = async (req, res) => {
       return res.status(400).json({ message: 'You have already checked in today.' });
     }
 
-    // Allow check-in if no record exists for today
     const attendance = new Attendance({
       employee: employeeId,
       checkInTime: new Date(),
@@ -72,6 +71,8 @@ const checkInHandler = async (req, res) => {
       overtimeHours: 0,
     });
 
+    employee.attendanceRecords.push(attendance);
+    await employee.save();
     await attendance.save();
     res.status(201).json({ message: 'Checked in successfully', attendance });
   } catch (error) {
@@ -131,9 +132,25 @@ const getAttendanceForEmployee = async (req, res) => {
   }
 };
 
+const getAttendanceRecords = async (req, res) => {
+  try {
+    const today = moment().startOf('day');
+    const attendanceRecords = await Attendance.find({
+      checkInTime: {
+      $gte: today.toDate(),
+      $lt: moment(today).endOf('day').toDate()
+      }
+    }).populate('employee');
+    res.status(200).json(attendanceRecords);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching attendance records', error });
+  }
+};
+
 module.exports = {
   checkInHandler,
   checkOutHandler,
+  getAttendanceRecords,
   getAttendanceForEmployee,
   updateGeofenceLocation
 };

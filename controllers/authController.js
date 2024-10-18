@@ -11,12 +11,12 @@ const generateToken = (id, role) => {
 
 // Register new user (HR or Employee)
 const registerUser = async (req, res) => {
-  const { name, email, password, role, department, contactDetails } = req.body;
-
+  const { name, email, password, role, contactDetails } = req.body;
+  const department = role;
   if (!name || !email || !password || !role) {
     return res.status(400).json({ message: 'Name, email, password, and role are required' });
   }
-
+  console.log(req.body);
   try {
     const user = new User({
       name,
@@ -28,20 +28,17 @@ const registerUser = async (req, res) => {
     await user.save();
 
     // Create associated employee profile if the role is 'employee'
-    const employee = new Employee({
+    const employee = await new Employee({
       user: user._id,
       contactDetails,
-    });
+      department: role,
+    }).populate();
 
-    if (role === 'employee') employee.department = department; 
+    if (role === 'employee') employee.department = department;
     await employee.save();
 
     const token = generateToken(user._id, user.role);
-    res.status(201).json({
-      message: 'User registered successfully!',
-      token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
-    });
+    res.json({ message: "Registered Successfully", token, role: user.role, details: employee });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: error.message });
@@ -52,23 +49,24 @@ const registerUser = async (req, res) => {
 // Login user
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     // Check if user exists
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
-
+    
     // Check if password matches
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
+    console.log(user, email, password);
 
     // Send JWT token in response
     const token = generateToken(user._id, user.role);
-    const emloyeeDetails = await Employee.findOne({ user: user._id });
+    const emloyeeDetails = await Employee.findOne({ user: user._id }).populate("user");
+    // console.log(emloyeeDetails);
     res.json({ token, role: user.role, details: emloyeeDetails });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });

@@ -1,18 +1,23 @@
 // backend/routes/leaveRoutes.js
 const express = require('express');
 const router = express.Router();
-const leaveController = require('../controllers/leaveControllers');
+const {
+    createLeaveRequest,
+    getEmployeeLeaves,
+    updateLeaveStatus,
+    getAllLeaves,
+} = require('../controllers/leaveControllers');
 
 // Create a new leave request
-router.post('/', leaveController.createLeaveRequest);
+router.post('/', createLeaveRequest);
 
 // Get all leave requests for a specific employee
-router.get('/:employeeId', leaveController.getEmployeeLeaves);
+router.get('/:employeeId', getEmployeeLeaves);
 
 // Update leave request status
-router.patch('/:leaveId/status', leaveController.updateLeaveStatus);
+router.patch('/:leaveId/status', updateLeaveStatus);
 
 // Get all leave requests (Admin view)
-router.get('/', leaveController.getAllLeaves);
+router.get('/', getAllLeaves);
 
 module.exports = router;

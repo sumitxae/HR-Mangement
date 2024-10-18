@@ -5,7 +5,8 @@ const {
   checkInHandler,
   checkOutHandler,
   getAttendanceForEmployee,
-  updateGeofenceLocation
+  updateGeofenceLocation,
+  getAttendanceRecords
 } = require('../controllers/attendanceController');
 const { isHR, protect } = require('../middlewares/authMiddleware');
 
@@ -20,5 +21,8 @@ router.put('/setLocation', protect, isHR, updateGeofenceLocation);
 
 // Route for getting attendance records for a specific employee
 router.get('/:employeeId', protect, getAttendanceForEmployee);
+
+
+router.get('/', protect, isHR, getAttendanceRecords);
 
 module.exports = router;

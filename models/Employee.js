@@ -19,46 +19,29 @@ const employeeSchema = new mongoose.Schema({
     type: Number,
     default: 1
   },
-  performanceHistory: [
-    {
-      date: { type: Date, required: true },
-      review: { type: String, required: true }
-    }
+  performanceHistory: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Performance'
+  }],
+  documents: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Document'
+  }
   ],
-  documents: [
-    {
-      docName: { type: String, required: true }, 
-      docUrl: { type: String, required: true } 
-    }
-  ],
-  attendance: [
-    {
-      date: { type: Date, required: true },
-      checkInTime: { type: String, required: true }, 
-      checkOutTime: { type: String, required: true }, 
-      geofencedLocation: { type: String, required: true } 
-    }
-  ],
+  attendanceRecords: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Attendance'
+  }],
   overtimeHours: { type: Number, default: 0 },
-  leaveRecords: [
-    {
-      leaveType: { type: String, enum: ['vacation', 'sick', 'personal'], required: true },
-      startDate: { type: Date, required: true }, 
-      endDate: { type: Date, required: true }, 
-      status: { type: String, enum: ['approved', 'pending', 'denied'], default: 'pending' }
-    }
-  ],
-  benefits: {
+  leaveRecords: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Leave'
+  }],
+  benefits: [{
     healthInsurance: { type: Boolean, default: false },
-    retirementPlan: { type: Boolean, default: false }
-  },
-  goals: [
-    {
-      title: { type: String, required: true }, 
-      description: { type: String, required: true }, 
-      status: { type: String, enum: ['pending', 'in-progress', 'completed'], default: 'pending' }
-    }
-  ],
+    retirementPlan: { type: Boolean, default: false },
+
+  }],
 }, {
   timestamps: true
 });

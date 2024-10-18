@@ -10,6 +10,10 @@ const payslipSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
+  overtime: {
+    type: Number,
+    default: 0
+  },
   tax: {
     type: Number,
     required: true

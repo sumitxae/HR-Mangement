@@ -6,10 +6,15 @@ const { uploadDocument } = require('../utils/documentUtils');
 const uploadDocumentHandler = async (req, res) => {
   const { employeeId, docName } = req.body;
   const file = req.file;
+  const employee = await Employee.findById(employeeId);
 
   if (!file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
+
+  if (!employee) { 
+    return res.status(404).json({ message: 'Employee not found' });
+   }
 
   try {
     const docUrl = await uploadDocument(file);
@@ -18,7 +23,8 @@ const uploadDocumentHandler = async (req, res) => {
       docName,
       docUrl
     });
-
+    employee.documents.push(document);
+    await employee.save();
     await document.save();
     res.status(201).json({ message: 'Document uploaded successfully', document });
   } catch (error) {

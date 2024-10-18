@@ -1,12 +1,28 @@
-// controllers/employeeController.js
 const Employee = require('../models/Employee');
 const { uploadDocument, generatePayslip } = require('../utils/documentUtils'); // Placeholder for document upload utility functions
 
-// Get all employees
 const getAllEmployees = async (req, res) => {
   try {
-    const employees = await Employee.find().populate('user', 'name email');
+    console.log("Fetching all employees...");
+    const employees = await Employee.find()
+      .populate('user', 'name email')
+      .populate('documents')
+      .populate('attendanceRecords')
+      .populate('leaveRecords');
+
     res.status(200).json(employees);
+  } catch (error) {
+    console.error('Error fetching employees:', error); // Log the full error
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+const getEmployeeDetails = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const employee = await Employee.findById(id).populate('user', 'name email').populate('documents').populate('attendanceRecords').populate('leaveRecords');
+    res.status(200).json(employee);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -14,16 +30,18 @@ const getAllEmployees = async (req, res) => {
 
 // Create or Update employee information
 const createOrUpdateEmployee = async (req, res) => {
-  const { userId, contactDetails, jobRole, salary } = req.body;
-
+  const { userName, contactDetails, jobRole, hourlyRate} = req.body;
   try {
+    console.log(req.body)
     const employee = await Employee.findOneAndUpdate(
-      { user: userId },
-      { contactDetails, jobRole, salary },
+      { user: userName },
+      { contactDetails, jobRole, salary, hourlyRate },
       { new: true, upsert: true }
     );
-    res.status(200).json(employee);
+    console.log("dfg")
+    res.status(200).json("employee");
   } catch (error) {
+    console.log(error.message)
     res.status(500).json({ message: error.message });
   }
 };
@@ -38,29 +56,6 @@ const uploadEmployeeDocument = async (req, res) => {
     const employee = await Employee.findOneAndUpdate(
       { user: userId },
       { $push: { documents: { docName: document.originalname, docUrl: documentUrl } } },
-      { new: true }
-    );
-    res.status(200).json(employee);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Time and Attendance Management
-const logAttendance = async (req, res) => {
-  const { userId, checkInTime, checkOutTime, geofencedLocation } = req.body;
-
-  try {
-    const attendance = {
-      date: new Date(),
-      checkInTime,
-      checkOutTime,
-      geofencedLocation,
-    };
-
-    const employee = await Employee.findOneAndUpdate(
-      { user: userId },
-      { $push: { attendance: attendance } },
       { new: true }
     );
     res.status(200).json(employee);
@@ -104,8 +99,7 @@ module.exports = {
   getAllEmployees,
   createOrUpdateEmployee,
   uploadEmployeeDocument,
-  logAttendance,
   calculateOvertime,
   generateEmployeePayslip,
-  // Other exports
+  getEmployeeDetails
 };

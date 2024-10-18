@@ -4,7 +4,8 @@ const router = express.Router();
 const {
   generatePayslip,
   getPayrollForEmployee,
-  checkPayrollStatus
+  checkPayrollStatus,
+  getAllPayrolls
 } = require('../controllers/payrollController');
 const { route } = require('./tax.routes');
 
@@ -16,5 +17,7 @@ router.get('/:employeeId', getPayrollForEmployee);
 
 // Route for checking payroll status for an employee
 router.get('/check/:employeeId', checkPayrollStatus);
+
+router.get("/", getAllPayrolls);
 
 module.exports = router;
